@@ -6,12 +6,28 @@
 
 package kilim.test;
 
+import static kilim.Constants.D_ARRAY_BOOLEAN;
+import static kilim.Constants.D_ARRAY_DOUBLE;
+import static kilim.Constants.D_ARRAY_INT;
+import static kilim.Constants.D_BOOLEAN;
+import static kilim.Constants.D_BYTE;
+import static kilim.Constants.D_CHAR;
+import static kilim.Constants.D_DOUBLE;
+import static kilim.Constants.D_FLOAT;
+import static kilim.Constants.D_INT;
+import static kilim.Constants.D_LONG;
+import static kilim.Constants.D_NULL;
+import static kilim.Constants.D_OBJECT;
+import static kilim.Constants.D_SHORT;
+import static kilim.Constants.D_STRING;
+import static kilim.Constants.D_VOID;
+
+import java.lang.reflect.Field;
+import java.util.Arrays;
+
+import junit.framework.TestCase;
 import kilim.analysis.IncompatibleTypesException;
 import kilim.analysis.TypeDesc;
-import junit.framework.TestCase;
-import static kilim.Constants.*;
-import java.lang.reflect.*;
-import java.util.Arrays;
 
 public class TestTypeDesc extends TestCase {
     public void testInterning() throws Exception {

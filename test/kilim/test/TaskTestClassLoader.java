@@ -11,7 +11,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 
+import me.jor.util.Log4jUtil;
+
+import org.apache.commons.logging.Log;
+
 public class TaskTestClassLoader extends ClassLoader {
+	private static final Log log=Log4jUtil.getLog(TaskTestClassLoader.class);
     static String wclassDir;
 
     static {
@@ -37,8 +42,7 @@ public class TaskTestClassLoader extends ClassLoader {
                         ret = defineClass(className, bytes, 0, bytes.length);
 //                    } 
                 } catch (IOException ioe) {
-                    System.err.println("Error loading class " + className + " from file " + f.getPath());
-                    ioe.printStackTrace();
+                    log.error("Error loading class " + className + " from file " + f.getPath(),ioe);
                     // Not supposed to happen
                     System.exit(1);
                 }

@@ -5,7 +5,8 @@
  */
 
 package kilim.bench.rmi;
-import java.rmi.*;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Hashtable;
 public class RMI {

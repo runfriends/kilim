@@ -9,12 +9,16 @@ import java.util.List;
 import kilim.analysis.ClassInfo;
 import kilim.analysis.FileLister;
 import kilim.tools.Weaver;
+import me.jor.util.Log4jUtil;
+
+import org.apache.commons.logging.Log;
 
 /**
  * Classloader that loads classes from the classpath spec given by the system property
  * "kilim.class.path" and weaves them dynamically.
  */
 public class WeavingClassLoader extends KilimClassLoader {
+	private static final Log log=Log4jUtil.getLog(WeavingClassLoader.class);
     public static final String KILIM_CLASSPATH = "kilim.class.path";
     /**
      * List of paths in kilim.class.path
@@ -38,7 +42,7 @@ public class WeavingClassLoader extends KilimClassLoader {
             try {
                 fileContainers.add(new FileLister(name));
             } catch (IOException ioe) {
-                // System.err.println( "'" + name + "' does not exist. See property " +
+                // log.error( "'" + name + "' does not exist. See property " +
                 // KILIM_CLASSPATH);
             }
         }
@@ -80,7 +84,7 @@ public class WeavingClassLoader extends KilimClassLoader {
                     ret = super.defineClass(name, code, 0, code.length);
                 }
             } catch (IOException ignore) {
-                System.err.println(ignore.getMessage());
+                log.error(ignore.getMessage());
             }
         }
         if (ret == null) {

@@ -8,8 +8,8 @@ package kilim.test;
 
 import java.util.ArrayList;
 
-import kilim.analysis.Usage;
 import junit.framework.TestCase;
+import kilim.analysis.Usage;
 
 public class TestUsage extends TestCase {
     /**

@@ -5,8 +5,8 @@
  */
 
 package kilim.analysis;
-import static kilim.Constants.D_UNDEFINED;
 import static kilim.Constants.D_NULL;
+import static kilim.Constants.D_UNDEFINED;
 
 import java.util.Arrays;
 

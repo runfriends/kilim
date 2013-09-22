@@ -136,7 +136,50 @@ public class EndPoint extends Mailbox<SockEvent> { // Mailbox for receiving sock
         } while (atleastN > 0);
         return buf;
     }
- 
+
+    /**
+     * Read any bytes into buffer if there's space. Otherwise, allocate a bigger
+     * buffer that'll accomodate the earlier contents and more bytes.
+     * 
+     * @param readBuffer
+     * @return
+     * @throws IOException
+     * @throws Pausable
+     */
+    public ByteBuffer read(ByteBuffer readBuffer) throws IOException, Pausable {
+        if (!readBuffer.hasRemaining() && readBuffer.capacity() < ByteBufferUtils.MAX_READ_BUFFER_SIZE) {
+            readBuffer = ByteBufferUtils.increaseBufferCapatity(readBuffer);
+        }
+        SocketChannel ch = this.dataChannel();
+        if (!ch.isOpen()) {
+            throw new EOFException();
+        }
+        int yieldCount = 0;
+
+        int n = ch.read(readBuffer);
+        // System.out.println(buf);
+        if (n == -1) {
+            this.close();
+            throw new EOFException();
+        }
+        if (n == 0) {
+            yieldCount++;
+            if (yieldCount < YIELD_COUNT) {
+                // Avoid registering with the selector because it requires
+                // waking up the selector, context switching
+                // between threads and calling the OS just to register. Just
+                // yield, let other tasks have a go, then
+                // check later. Do this at most YIELD_COUNT times before going
+                // back to the selector.
+                Task.yield();
+            }
+            else {
+                this.pauseUntilReadble();
+                yieldCount = 0;
+            }
+        }
+        return readBuffer;
+    }
 
     /**
      * Reads a length-prefixed message in its entirety.
@@ -246,5 +289,11 @@ public class EndPoint extends Mailbox<SockEvent> { // Mailbox for receiving sock
         } catch (Exception ignore) {
             ignore.printStackTrace();
         }
+    }
+    
+    public void pauseUntilConnectable() throws Pausable, IOException {
+        SockEvent ev = new SockEvent(this, this.sockch, SelectionKey.OP_CONNECT);
+        this.sockEvMbx.putnb(ev);
+        super.get(); // wait on self
     }
 }

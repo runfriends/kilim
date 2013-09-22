@@ -6,38 +6,43 @@
 
 package kilim.tools;
 
+import me.jor.util.Log4jUtil;
+
+import org.apache.commons.logging.Log;
+
 // Various print routines to call from jvml files (*.j). More convenient
 // than calling System.out.println.
 
 public class P {
+	private static final Log log=Log4jUtil.getLog(P.class);
     // Call as invokestatic  kilim/tools/P/pi(I)V
     public static void pi(int i) {
-        System.out.println(i);
+        log.info(i);
     }
 
     // Call as invokestatic kilim/tools/P/pn()V
     public static void pn() {
-        System.out.println();
+        log.info("");
     }
 
     // Call as invokestatic kilim/tools/P/pn(Ljava/lang/Object;)V
     public static void pn(Object o) {
-        System.out.println(o);
+        log.info(o);
     }
 
     // Call as invokestatic  kilim/tools/P/p(Ljava/lang/Object;)V
     public static void p(Object o) {
-        System.out.print(o);
+        log.info(o);
     }
 
     // Call as invokestatic kilim/tools/P/ps(Ljava/lang/Object;)V
     public static void ps(Object o) {
-        System.out.print(o);
-        System.out.print(" ");
+        log.info(o);
+        log.info(" ");
     }
     // Call as invokestatic kilim/tools/P/ptest()V
     public static void ptest() {
-        System.out.println("test");
+        log.info("test");
     }
 
 }

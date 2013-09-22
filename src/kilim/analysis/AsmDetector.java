@@ -1,14 +1,18 @@
 package kilim.analysis;
 
-import java.util.LinkedList;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import kilim.mirrors.Detector;
+import me.jor.util.Log4jUtil;
 
+import org.apache.commons.logging.Log;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
+
+
 
 /**
  * This class is called by Detector to parse signatures of classes
@@ -16,6 +20,7 @@ import org.objectweb.asm.tree.MethodNode;
  * of trying to classload it.
  */
 public class AsmDetector {
+	private static final Log log=Log4jUtil.getLog(AsmDetector.class);
     static HashMap<String, ClassCache> classCacheMap= new HashMap<String, ClassCache>();
     public static int getPausableStatus(String className, String methodName,
             String desc, Detector detector) 
@@ -39,7 +44,7 @@ public class AsmDetector {
             }
             return status;
         } catch (IOException ioe) {
-            System.err.println("***Error reading " + className + ": " + ioe.getMessage());
+            log.error("***Error reading " + className + ": " + ioe.getMessage());
             return Detector.METHOD_NOT_FOUND_OR_PAUSABLE;
         }
     }

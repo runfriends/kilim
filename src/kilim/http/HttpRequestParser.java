@@ -14,15 +14,20 @@ package kilim.http;
  * specification file HttpRequestParser.rl. All changes must be made in the .rl file.
  **/
 
-import java.util.TimeZone;
-import java.util.GregorianCalendar;
-import java.nio.charset.Charset;
-import java.nio.ByteBuffer;
-import java.io.UnsupportedEncodingException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
+
+import me.jor.util.Log4jUtil;
+
+import org.apache.commons.logging.Log;
 
 public class HttpRequestParser {
+  public static final Log log=Log4jUtil.getLog(HttpRequestParser.class);
   public static final Charset UTF8 = Charset.forName("UTF-8");
 
   
@@ -1704,16 +1709,16 @@ case 5:
       "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7\r\n" +
       "Keep-Alive: 300\r\n" +
       "Connection: keep-alive\r\n\r\n";
-    System.out.println("Input Request: (" + s.length() + " bytes)");System.out.println(s);
+    log.info("Input Request: (" + s.length() + " bytes)");log.info(s);
     byte[] data = s.getBytes();
     int len = data.length;
     
-    System.out.println("=============================================================");
+    log.info("=============================================================");
     HttpRequest req = new HttpRequest();
     req.buffer = ByteBuffer.allocate(2048);
     req.buffer.put(data);
     initHeader(req, len);
-    System.out.println(req);
+    log.info(req);
   }
 }
 

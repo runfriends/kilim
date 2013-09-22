@@ -14,13 +14,16 @@ import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 
 import kilim.analysis.ClassInfo;
+import me.jor.util.Log4jUtil;
+
+import org.apache.commons.logging.Log;
 
 /**
  * Simple utility class to invoke the java compiler.
  */
 
 public class Javac {
-
+	private static final Log log=Log4jUtil.getLog(Javac.class);
     /**
      * Given a list of file-scope java code (equivalent to a .java file, including package and
      * import declarations), compile() invokes javac to compile them, produce classfiles and return
@@ -117,12 +120,12 @@ public class Javac {
                 deleteDir(f);
             } else {
                 if (!f.delete()) {
-                    System.err.println("Unable to delete " + f.getAbsolutePath());
+                    log.error("Unable to delete " + f.getAbsolutePath());
                 }
             }
         }
         if (!rootDir.delete()) {
-            System.err.println("Unable to delete " + rootDir.getAbsolutePath());
+            log.error("Unable to delete " + rootDir.getAbsolutePath());
         }
     }
 
@@ -137,7 +140,7 @@ public class Javac {
                 String qname = pkgName + fname.substring(0, fname.length() - 6);
                 ret.add(new ClassInfo(qname, readFile(f)));
             } else {
-                System.err.println("Unexpected file : " + f.getAbsolutePath());
+                log.error("Unexpected file : " + f.getAbsolutePath());
             }
         }
     }

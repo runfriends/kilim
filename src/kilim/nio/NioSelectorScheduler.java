@@ -13,14 +13,15 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
-import java.util.LinkedList;
 
 import kilim.Mailbox;
 import kilim.Pausable;
 import kilim.RingQueue;
 import kilim.Scheduler;
 import kilim.Task;
-import kilim.http.IntList;
+import me.jor.util.Log4jUtil;
+
+import org.apache.commons.logging.Log;
 
 /**
  * This class wraps a selector and runs it in a separate thread.
@@ -42,6 +43,7 @@ import kilim.http.IntList;
  *  @see SessionTask 
  */
 public class NioSelectorScheduler extends Scheduler {
+	private static final Log log=Log4jUtil.getLog(NioSelectorScheduler.class);
     //TODO: Fix hardcoding
     public static int         LISTEN_BACKLOG  = 1000;
 
@@ -240,8 +242,7 @@ public class NioSelectorScheduler extends Scheduler {
                         task.start();
                     } catch (IOException ioe) {
                         ch.close();
-                        System.err.println("Unable to start session:");
-                        ioe.printStackTrace();
+                        log.error("Unable to start session:",ioe);
                     }
                 }
             }

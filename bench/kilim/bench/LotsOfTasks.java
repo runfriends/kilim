@@ -6,7 +6,10 @@
 
 package kilim.bench;
 
-import kilim.*;
+import kilim.ExitMsg;
+import kilim.Mailbox;
+import kilim.Pausable;
+import kilim.Task;
 
 // Usage: java kilim.bench.LotsOfTasks -ntasks  
 //                 creates ntasks and waits for them to finish

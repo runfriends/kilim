@@ -13,6 +13,9 @@ import java.nio.ByteBuffer;
 
 import kilim.Pausable;
 import kilim.nio.EndPoint;
+import me.jor.util.Log4jUtil;
+
+import org.apache.commons.logging.Log;
 
 /**
  * This object encapsulates a bytebuffer (via HttpMsg). HttpRequestParser creates an instance of this object, but only
@@ -20,6 +23,7 @@ import kilim.nio.EndPoint;
  * bytebuffer. Use {@link #getHeader(String)} to get the appropriate field.
  */
 public class HttpRequest extends HttpMsg {
+	private static final Log log=Log4jUtil.getLog(HttpRequest.class);
     // All the header related members of this class are initialized by the HttpRequestParser class.
 
     /**
@@ -216,9 +220,11 @@ public class HttpRequest extends HttpMsg {
     public void dumpBuffer(ByteBuffer buffer) {
         byte[] ba = buffer.array();
         int len = buffer.position();
+        StringBuilder print=new StringBuilder();
         for (int i = 0; i < len; i++) {
-            System.out.print((char) ba[i]);
+            print.append((char) ba[i]);
         }
+        log.debug(print);
     }
 
     public void addField(String key, int valRange) {

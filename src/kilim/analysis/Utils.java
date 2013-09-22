@@ -6,11 +6,16 @@
 
 package kilim.analysis;
 
+import me.jor.util.Log4jUtil;
+
+import org.apache.commons.logging.Log;
+
 /**
  * Simple string utils for pretty printing support
  *
  */
 public class Utils {
+	private static final Log log=Log4jUtil.getLog(Utils.class);
     public static String indentStr = "";
     public static String spaces    = "                                        ";
 
@@ -57,19 +62,19 @@ public class Utils {
     }
 
     public static void p(String s) {
-        System.out.print(format(s));
+        log.info(format(s));
     }
 
     public static void pn(String s) {
-        System.out.println(format(s));
+    	log.error(format(s));
     }
 
     public static void pn(int i) {
-        System.out.println(format("" + i));
+    	log.error(format("" + i));
     }
 
     public static void pn() {
-        System.out.println();
+    	log.error("");
     }
 
     public static void pn(Object o) {

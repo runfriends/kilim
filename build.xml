@@ -2,7 +2,7 @@
 <project name="kilim" default="all">
   <path id="kilim.classpath">
     <pathelement location="classes/" />
-    <fileset dir="./libs">
+    <fileset dir="./lib">
       <include name="**/*.jar"/>
     </fileset>
     <pathelement path="${java.class.path}" />
@@ -10,7 +10,7 @@
   <path id="kilim.testwovenclasspath">
     <pathelement location="testclasses/" />
     <pathelement location="classes/" />
-    <fileset dir="./libs">
+    <fileset dir="./lib">
       <include name="**/*.jar"/>
     </fileset>
     <pathelement path="${java.class.path}" />
@@ -124,7 +124,7 @@
   <target name="jar" description="generate the distribution">
     <copy file="License" todir="classes/kilim" />
     <jar jarfile="kilim.jar" basedir="classes">
-      <zipgroupfileset dir="libs" includes="*.jar">
+      <zipgroupfileset dir="lib" includes="*.jar">
 		<exclude name="junit.jar" />
       </zipgroupfileset>
       <exclude name="kilim/test/**" />

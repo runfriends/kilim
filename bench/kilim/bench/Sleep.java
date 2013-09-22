@@ -6,7 +6,9 @@
 
 package kilim.bench;
 
-import kilim.*;
+import kilim.Fiber;
+import kilim.Pausable;
+import kilim.Task;
 
 
 public class Sleep extends Task {

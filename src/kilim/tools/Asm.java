@@ -6,7 +6,34 @@
 
 package kilim.tools;
 
-import static kilim.Constants.*;
+import static kilim.Constants.D_DOUBLE;
+import static kilim.Constants.D_LONG;
+import static kilim.Constants.LDC2_W;
+import static org.objectweb.asm.Opcodes.ACC_ABSTRACT;
+import static org.objectweb.asm.Opcodes.ACC_ENUM;
+import static org.objectweb.asm.Opcodes.ACC_FINAL;
+import static org.objectweb.asm.Opcodes.ACC_INTERFACE;
+import static org.objectweb.asm.Opcodes.ACC_NATIVE;
+import static org.objectweb.asm.Opcodes.ACC_PRIVATE;
+import static org.objectweb.asm.Opcodes.ACC_PROTECTED;
+import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
+import static org.objectweb.asm.Opcodes.ACC_STATIC;
+import static org.objectweb.asm.Opcodes.ACC_STRICT;
+import static org.objectweb.asm.Opcodes.ACC_SUPER;
+import static org.objectweb.asm.Opcodes.ACC_SYNCHRONIZED;
+import static org.objectweb.asm.Opcodes.ACC_TRANSIENT;
+import static org.objectweb.asm.Opcodes.ACC_VOLATILE;
+import static org.objectweb.asm.Opcodes.NEWARRAY;
+import static org.objectweb.asm.Opcodes.T_BOOLEAN;
+import static org.objectweb.asm.Opcodes.T_BYTE;
+import static org.objectweb.asm.Opcodes.T_CHAR;
+import static org.objectweb.asm.Opcodes.T_DOUBLE;
+import static org.objectweb.asm.Opcodes.T_FLOAT;
+import static org.objectweb.asm.Opcodes.T_INT;
+import static org.objectweb.asm.Opcodes.T_LONG;
+import static org.objectweb.asm.Opcodes.T_SHORT;
+import static org.objectweb.asm.Opcodes.V1_5;
+import static org.objectweb.asm.Opcodes.V1_6;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -20,6 +47,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import me.jor.util.Log4jUtil;
+
+import org.apache.commons.logging.Log;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
@@ -45,6 +75,7 @@ import org.objectweb.asm.Type;
  * @author sriram srinivasan (sriram@malhar.net)
  */
 public class Asm {
+	private static final Log log=Log4jUtil.getLog(Asm.class);
     static boolean                  quiet          = false;
     static String                   outputDir      = ".";
     static Pattern                  wsPattern      = Pattern.compile("\\s+");
@@ -88,7 +119,7 @@ public class Asm {
     public static void main(String[] args) throws IOException {
         List<String> files = parseArgs(args);
         for (String arg : files) {
-            if (!quiet) {System.out.println("Asm: "  + arg);}
+            if (!quiet) {log.info("Asm: "  + arg);}
             new Asm(arg).write();
         }
     }
@@ -101,20 +132,20 @@ public class Asm {
             parseClass();
         } catch (EOF eof) {
             if (!eofOK) {
-                System.err.println("Premature end of file: " + fileName);
+                log.error("Premature end of file: " + fileName);
                 System.exit(1);
             }
         } catch (AsmException e) {
-            System.err.println(e.getMessage());
+            log.error(e);
             System.exit(1);
         } catch (RuntimeException e) {
-            System.out.println("File: " + fileName);
+            log.warn("File: " + fileName);
             if (methodName != null) {
-                System.out.println("Method: " + methodName);
+                log.warn("Method: " + methodName);
             }
-            System.out.println("");
-            System.out.println("Line " + line);
-            System.out.println("Last pattern match: " + lastPattern);
+            log.warn("");
+            log.warn("Line " + line);
+            log.warn("Last pattern match: " + lastPattern);
             throw e;
         }
     }
@@ -326,7 +357,7 @@ public class Asm {
         } else if (lineMatch(annotationPattern)) {
             parseAnnotation();
         } else if (!quiet) {
-            System.err.println("Directive ignored: " + line);
+            log.error("Directive ignored: " + line);
         }
     }
 
@@ -772,7 +803,7 @@ public class Asm {
         FileOutputStream fos = new FileOutputStream(fileName);
         fos.write(cv.toByteArray());
         fos.close();
-        System.out.println("Wrote: " + fileName);
+        log.info("Wrote: " + fileName);
     }
 
     private static void mkdir(String dir) throws IOException {

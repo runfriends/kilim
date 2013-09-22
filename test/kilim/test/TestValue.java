@@ -6,9 +6,12 @@
 
 package kilim.test;
 
-import kilim.analysis.Value;
+import static kilim.Constants.D_INT;
+import static kilim.Constants.D_OBJECT;
+import static kilim.Constants.D_STRING;
+import static kilim.Constants.D_UNDEFINED;
 import junit.framework.TestCase;
-import static kilim.Constants.*;
+import kilim.analysis.Value;
 
 public class TestValue extends TestCase {
     public void testSameSiteMerge() {

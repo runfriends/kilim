@@ -1,6 +1,7 @@
 package kilim.test.ex;
 
-import kilim.*;
+import kilim.Pausable;
+import kilim.Task;
 
 interface ExInterface {
     int foo(float f) throws Pausable;

@@ -5,12 +5,13 @@
  */
 package kilim.analysis;
 
-import kilim.*;
-import kilim.mirrors.Detector;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+
+import kilim.Constants;
+import kilim.KilimException;
+import kilim.mirrors.Detector;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.MethodVisitor;

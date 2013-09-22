@@ -20,8 +20,8 @@ import static kilim.Constants.D_NULL;
 import static kilim.Constants.D_OBJECT;
 import static kilim.Constants.D_SHORT;
 import static kilim.Constants.D_STATE;
-import static kilim.Constants.D_VOID;
 import static kilim.Constants.D_UNDEFINED;
+import static kilim.Constants.D_VOID;
 import static kilim.Constants.FIBER_CLASS;
 import static kilim.Constants.FLOAD_0;
 import static kilim.Constants.FSTORE_0;
@@ -81,10 +81,10 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collections;
 
-import org.objectweb.asm.tree.LabelNode;
-import org.objectweb.asm.tree.TableSwitchInsnNode;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.MethodInsnNode;
+import org.objectweb.asm.tree.TableSwitchInsnNode;
 
 /**
  * This class produces all the code associated with a specific pausable method

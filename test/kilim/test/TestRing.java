@@ -1,9 +1,8 @@
 package kilim.test;
 
-import junit.framework.TestCase;
-
 import java.util.Random;
 
+import junit.framework.TestCase;
 import kilim.RingQueue;
 
 public class TestRing extends TestCase {

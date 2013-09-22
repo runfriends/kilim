@@ -6,7 +6,9 @@
 
 package kilim.bench;
 
-import kilim.*;
+import kilim.Mailbox;
+import kilim.Pausable;
+import kilim.Task;
 
 public class Chain extends Task {
     static class Mbx extends Mailbox<Integer>{}

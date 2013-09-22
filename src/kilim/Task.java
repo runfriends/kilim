@@ -13,6 +13,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import me.jor.util.Log4jUtil;
+
+import org.apache.commons.logging.Log;
+
 /**
  * A base class for tasks. A task is a lightweight thread (it contains its 
  * own stack in the form of a fiber). A concrete subclass of Task must
@@ -20,6 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  */
 public abstract class Task implements EventSubscriber {
+	private static final Log log=Log4jUtil.getLog(Task.class);
     public volatile Thread currentThread = null;
 
     static PauseReason         yieldReason = new YieldReason();
@@ -218,17 +223,17 @@ public abstract class Task implements EventSubscriber {
     }
 
     public static void errNotWoven() {
-        System.err.println("############################################################");
-        System.err.println("Task has either not been woven or the classpath is incorrect");
-        System.err.println("############################################################");
+    	log.error("############################################################");
+    	log.error("Task has either not been woven or the classpath is incorrect");
+    	log.error("############################################################");
         Thread.dumpStack();
         System.exit(0);
     }
     
     public static void errNotWoven(Task t) {
-        System.err.println("############################################################");
-        System.err.println("Task " + t.getClass() + " has either not been woven or the classpath is incorrect");
-        System.err.println("############################################################");
+        log.error("############################################################");
+        log.error("Task " + t.getClass() + " has either not been woven or the classpath is incorrect");
+        log.error("############################################################");
         Thread.dumpStack();
         System.exit(0);
     }
@@ -425,7 +430,8 @@ public abstract class Task implements EventSubscriber {
      * execute processing (in addition to calling the execute(fiber) method
      * of the task.
      */
-    public void _runExecute(WorkerThread thread) throws NotPausable {
+    public void _runExecute(WorkerThread thread, boolean resetPreferredResumeThread) throws NotPausable{
+
         Fiber f = fiber;
         boolean isDone = false; 
         try {
@@ -466,7 +472,9 @@ public abstract class Task implements EventSubscriber {
                     preferredResumeThread = thread;
                 } else {
                     assert numActivePins == 0: "numActivePins == " + numActivePins;
-                    preferredResumeThread = null;
+                    if(resetPreferredResumeThread){
+                    	preferredResumeThread = null;
+                    }
                 }
             }
             
@@ -484,6 +492,10 @@ public abstract class Task implements EventSubscriber {
                 resume();
             }
         }
+    
+    }
+    public void _runExecute(WorkerThread thread) throws NotPausable {
+    	this._runExecute(thread,true);
     }
         
     public ExitMsg joinb() {
@@ -510,6 +522,14 @@ public abstract class Task implements EventSubscriber {
     
     public void checkKill() {
     }
+
+	public WorkerThread getPreferredResumeThread() {
+		return preferredResumeThread;
+	}
+
+	public void setPreferredResumeThread(WorkerThread preferredResumeThread) {
+		this.preferredResumeThread = preferredResumeThread;
+	}
 
 }
 

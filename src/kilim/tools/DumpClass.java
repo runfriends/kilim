@@ -23,7 +23,9 @@ import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
 import kilim.analysis.TypeDesc;
+import me.jor.util.Log4jUtil;
 
+import org.apache.commons.logging.Log;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.ClassReader;
@@ -39,7 +41,6 @@ import org.objectweb.asm.Opcodes;
  * @author sriram
  */
 public class DumpClass extends ClassVisitor implements Opcodes {
-    
     static boolean lineNumbers = true;
     
     public static void main(String[] args) throws IOException {
@@ -186,7 +187,7 @@ class DummyAnnotationVisitor extends AnnotationVisitor {
 }
 
 class DumpMethodVisitor extends MethodVisitor implements Opcodes {
-
+	private static final Log log=Log4jUtil.getLog(DumpMethodVisitor.class);
     public DumpMethodVisitor() {
         super(Opcodes.ASM4);
     }
@@ -242,17 +243,19 @@ class DumpMethodVisitor extends MethodVisitor implements Opcodes {
         pn("; Frame " + type);
         
         p (";  Locals - ");
+        StringBuilder print=new StringBuilder();
         for(int i = 0; i < nLocal; i++) {
             Object o = local[i];
-            System.out.print("#" + i + "."  + type(o) + "  ");
+            print.append("#" + i + "."  + type(o) + "  ");
         }
-        System.out.println();
+        log.info(print);
         p(";  Stack - ");
+        print.delete(0, print.length());
         for(int i = 0; i < nStack; i++) {
             Object o = stack[i];
-            System.out.print("#" + i + "."  + type(o) + "  ");
+            print.append("#" + i + "."  + type(o) + "  ");
         }
-        System.out.println("");
+        log.info(print);
     }
 
     private String type(Object o) {

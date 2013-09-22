@@ -30,7 +30,9 @@ import kilim.analysis.TypeDesc;
 import kilim.analysis.Usage;
 import kilim.analysis.Value;
 import kilim.mirrors.Detector;
+import me.jor.util.Log4jUtil;
 
+import org.apache.commons.logging.Log;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 
@@ -39,9 +41,10 @@ import org.objectweb.asm.tree.MethodInsnNode;
  * @author ram
  */
 public class FlowAnalyzer {
+	private static final Log log=Log4jUtil.getLog(FlowAnalyzer.class);
     public static void main(String[] args) throws Exception {
         if (args.length == 0) {
-            System.err.println("Usage <class name | jar file name> [methodName]");
+            log.error("Usage <class name | jar file name> [methodName]");
             System.exit(1);
         }
         String name = args[0];
@@ -56,7 +59,7 @@ public class FlowAnalyzer {
         try {
             pn("-------------------------------------------------");
             pn("Class: " + className);
-            System.out.flush();
+//            System.out.flush();
             ClassFlow cf = null;
             if (className.endsWith(".class")) {
                 FileInputStream fis = null;
@@ -84,8 +87,7 @@ public class FlowAnalyzer {
     }
     
     private static void stackTrace(Throwable t) {
-        PrintStream ps = new PrintStream(System.out);
-        t.printStackTrace(ps);
+    	log.error("",t);
     }
     
     private static void reportFlow(MethodFlow method, String className) {
@@ -157,9 +159,9 @@ public class FlowAnalyzer {
                 case 'U': 
                     default: {
                     c = 'U';
-                    System.err.println("***************************************");
-                    System.err.println("Undefined/unrecognized value " + v);
-                    System.err.println("BasicBlock:\n" + bb);
+                    log.error("***************************************");
+                    log.error("Undefined/unrecognized value " + v);
+                    log.error("BasicBlock:\n" + bb);
                     break;
                 }
             }

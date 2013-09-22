@@ -37,7 +37,9 @@ import java.util.Stack;
 
 import kilim.KilimException;
 import kilim.mirrors.Detector;
+import me.jor.util.Log4jUtil;
 
+import org.apache.commons.logging.Log;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.IincInsnNode;
@@ -97,7 +99,7 @@ import org.objectweb.asm.tree.VarInsnNode;
  * </dl>
  */
 public class BasicBlock implements Comparable<BasicBlock> {
-
+	private static final Log log=Log4jUtil.getLog(BasicBlock.class);
     /**
      * A number handed out in increasing order of starting position, to ease
      * sorting as well as for debug information
@@ -1083,10 +1085,10 @@ public class BasicBlock implements Comparable<BasicBlock> {
                 canThrowException = false;
             }
         } catch (AssertionError ae) {
-            System.err.println("**** Assertion Error analyzing " + flow.classFlow.name + "." + flow.name);
-            System.err.println("Basic block " + this);
-            System.err.println("i = " + i);
-            System.err.println("Frame: " + frame);
+            log.error("**** Assertion Error analyzing " + flow.classFlow.name + "." + flow.name);
+            log.error("Basic block " + this);
+            log.error("i = " + i);
+            log.error("Frame: " + frame);
             throw ae;
         }
 

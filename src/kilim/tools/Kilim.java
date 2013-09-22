@@ -3,6 +3,9 @@ package kilim.tools;
 import java.lang.reflect.Method;
 
 import kilim.WeavingClassLoader;
+import me.jor.util.Log4jUtil;
+
+import org.apache.commons.logging.Log;
 
 
 
@@ -14,6 +17,7 @@ import kilim.WeavingClassLoader;
  * use the raw, unwoven classes. 
  */
 public class Kilim {
+	private static final Log log=Log4jUtil.getLog(Kilim.class);
     public static void main(String[] args) throws Exception {
         if (args.length == 0) {
             usage();
@@ -27,7 +31,7 @@ public class Kilim {
     }
 
     private static void usage() {
-        System.out.println("java -Dkilim.classpath kilim.tools.Kilim class [args ...]");
+        log.info("java -Dkilim.classpath kilim.tools.Kilim class [args ...]");
         System.exit(1);
     }
 

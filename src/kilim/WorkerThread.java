@@ -8,7 +8,12 @@ package kilim;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import me.jor.util.Log4jUtil;
+
+import org.apache.commons.logging.Log;
+
 public class WorkerThread extends Thread {
+	private static final Log log=Log4jUtil.getLog(WorkerThread.class);
     volatile Task        runningTask;
     /**
      * A list of tasks that prefer to run only on this thread. This is used by kilim.ReentrantLock and Task to ensure
@@ -19,11 +24,20 @@ public class WorkerThread extends Thread {
     static AtomicInteger gid        = new AtomicInteger();
     public int           numResumes = 0;
 
-    WorkerThread(Scheduler ascheduler) {
-        super("KilimWorker-" + gid.incrementAndGet());
-        scheduler = ascheduler;
+    public WorkerThread(Scheduler ascheduler) {
+        this("KilimWorker-" + gid.incrementAndGet(),ascheduler);
+    }
+    public WorkerThread(String name, Scheduler ascheduler){
+    	super(name);
+    	scheduler=ascheduler;
     }
 
+    public synchronized RingQueue<Task> swapRunnables(RingQueue<Task> emptyRunnables) {
+        RingQueue<Task> ret = this.tasks;
+        this.tasks = emptyRunnables;
+        return ret;
+    }
+    
     public void run() {
         try {
             while (true) {
@@ -35,11 +49,11 @@ public class WorkerThread extends Thread {
         } catch (ShutdownException se) {
             // nothing to do.
         } catch (OutOfMemoryError ex) {
-            System.err.println("Out of memory");
+            log.error("Out of memory");
             System.exit(1);
         } catch (Throwable ex) {
             ex.printStackTrace();
-            System.err.println(runningTask);
+            log.error(runningTask);
         }
         runningTask = null;
     }
@@ -98,5 +112,8 @@ public class WorkerThread extends Thread {
             }
         } catch (InterruptedException ignore) {
         }
+    }
+    public boolean put(Task task){
+    	return this.tasks.put(task);
     }
 }

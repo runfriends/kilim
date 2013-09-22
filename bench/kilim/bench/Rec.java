@@ -6,7 +6,10 @@
 
 package kilim.bench;
 
-import kilim.*;
+import kilim.Fiber;
+import kilim.NotPausable;
+import kilim.Pausable;
+import kilim.Task;
     
 public class Rec extends Task {
     static boolean pause = false;

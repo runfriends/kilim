@@ -8,6 +8,10 @@ package kilim;
 
 import java.util.LinkedList;
 
+import me.jor.util.Log4jUtil;
+
+import org.apache.commons.logging.Log;
+
 /** 
  * This is a basic FIFO Executor. It maintains a list of
  * runnable tasks and hands them out to WorkerThreads. Note that
@@ -18,6 +22,7 @@ import java.util.LinkedList;
  * 
  */
 public class Scheduler {
+	private static final Log log=Log4jUtil.getLog(Scheduler.class);
     public static volatile Scheduler defaultScheduler = null;
     public static int defaultNumberThreads;
     
@@ -145,7 +150,7 @@ public class Scheduler {
     }
 
     public void dump() {
-        System.out.println(runnableTasks);
+        log.info(runnableTasks);
 //      for (WorkerThread w: allThreads) {
 //          w.dumpStack();
 //      }

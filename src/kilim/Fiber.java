@@ -8,13 +8,17 @@ package kilim;
 
 import java.lang.reflect.Field;
 
+import me.jor.util.Log4jUtil;
+
+import org.apache.commons.logging.Log;
+
 /**
  * This class serves as a context to manage and store the continuation stack.
  * The actual capture of the closure is done in the Weaver-transformed code.
  */
 
 public final class Fiber {
-
+	private static final Log log=Log4jUtil.getLog(Fiber.class);
 //    public boolean debug = false;
     /**
      * The current frame's state (local vars  and elements of the operand stack 
@@ -214,7 +218,7 @@ public final class Fiber {
             String meth = ste.getMethodName();
             if (cl.startsWith("kilim.Worker") || meth.equals("go") || meth.equals("ds")) continue;
             String line = ste.getLineNumber() < 0 ? ""  : ":" + ste.getLineNumber();
-            System.out.println('\t' + cl + '.' + ste.getMethodName() + 
+            log.info('\t' + cl + '.' + ste.getMethodName() + 
                     '(' + ste.getFileName() + line + ')');
         }
     }

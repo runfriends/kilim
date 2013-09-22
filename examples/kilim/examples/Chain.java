@@ -6,7 +6,9 @@
 
 package kilim.examples;
 
-import kilim.*;
+import kilim.Mailbox;
+import kilim.Pausable;
+import kilim.Task;
 /**
  * Set up a chain of tasks. Each task knows about its mailbox and
  * that of the next in the chain, but is not given the other tasks

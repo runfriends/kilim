@@ -22,12 +22,16 @@ import kilim.analysis.ClassWeaver;
 import kilim.analysis.FileLister;
 import kilim.mirrors.CachedClassMirrors;
 import kilim.mirrors.Detector;
+import me.jor.util.Log4jUtil;
+
+import org.apache.commons.logging.Log;
 
 /**
  * This class supports both command-line and run time weaving of Kilim bytecode. 
  */
 
 public class Weaver {
+	private static final Log log=Log4jUtil.getLog(Weaver.class);
     public static String outputDir = null;
     public static boolean verbose = true;
     public static Pattern excludePattern = null;
@@ -85,14 +89,14 @@ public class Weaver {
                     weaveClass(name, detector);
                 }
             } catch (KilimException ke) {
-                System.err.println("Error weaving " + currentName + ". " + ke.getMessage());
+                log.error("Error weaving " + currentName + ". " + ke.getMessage());
                 // ke.printStackTrace();
                 System.exit(1);
             } catch (IOException ioe) {
-                System.err.println("Unable to find/process '" + currentName + "'");
+            	log.error("Unable to find/process '" + currentName + "'");
                 System.exit(1);
             } catch (Throwable t) {
-                System.err.println("Error weaving " + currentName);
+            	log.error("Error weaving " + currentName);
                 t.printStackTrace();
                 System.exit(1);
             }
@@ -110,16 +114,16 @@ public class Weaver {
             cw.weave();
             writeClasses(cw);
         } catch (KilimException ke) {
-            System.err.println("***** Error weaving " + name + ". " + ke.getMessage());
+            log.error("***** Error weaving " + name + ". " + ke.getMessage());
             // ke.printStackTrace();
             err = 1;
         } catch (RuntimeException re) {
-            System.err.println("***** Error weaving " + name + ". " + re.getMessage());
+        	log.error("***** Error weaving " + name + ". " + re.getMessage());
             re.printStackTrace();
             err = 1;
         } catch (IOException ioe) {
             err = 1;
-            System.err.println("***** Unable to find/process '" + name + "'\n" + ioe.getMessage());
+            log.error("***** Unable to find/process '" + name + "'\n" + ioe.getMessage());
         }
     }
 
@@ -129,12 +133,12 @@ public class Weaver {
             writeClasses(cw);
         } catch (KilimException ke) {
             err = 1;
-            System.err.println("***** Error weaving " + name + ". " + ke.getMessage());
+            log.error("***** Error weaving " + name + ". " + ke.getMessage());
             // ke.printStackTrace();
 
         } catch (IOException ioe) {
             err = 1;
-            System.err.println("***** Unable to find/process '" + name + "'\n" + ioe.getMessage());
+            log.error("***** Unable to find/process '" + name + "'\n" + ioe.getMessage());
         }
     }
 
@@ -146,13 +150,13 @@ public class Weaver {
             writeClasses(cw);
         } catch (KilimException ke) {
             err = 1;
-            System.err.println("***** Error weaving " + name + ". " + ke.getMessage());
+            log.error("***** Error weaving " + name + ". " + ke.getMessage());
             // ke.printStackTrace();
             throw ke;
 
         } catch (IOException ioe) {
             err = 1;
-            System.err.println("***** Unable to find/process '" + name + "'\n" + ioe.getMessage());
+            log.error("***** Unable to find/process '" + name + "'\n" + ioe.getMessage());
             throw ioe;
         }
     }
@@ -181,7 +185,7 @@ public class Weaver {
         fos.write(ci.bytes);
         fos.close();
         if (verbose) {
-            System.out.println("Wrote: " + className);
+            log.info("Wrote: " + className);
         }
     }
 
@@ -200,16 +204,21 @@ public class Weaver {
     }
 
     static void help() {
-        System.err.println("java kilim.tools.Weaver opts -d <outputDir> (class/directory/jar)+");
-        System.err.println("   where opts are   -q : quiet");
-        System.err.println("                    -x <regex> : exclude all classes matching regex");
+    	log.error("java kilim.tools.Weaver opts -d <outputDir> (class/directory/jar)+");
+        log.error("   where opts are   -q : quiet");
+        log.error("                    -x <regex> : exclude all classes matching regex");
         System.exit(1);
     }
-
+    
+    static String[] useDefault(){
+    	return new String[]{"-d","./woven","./woven"};
+    }
+    
     static ArrayList<String> parseArgs(String[] args) throws IOException {
-        if (args.length == 0)
-            help();
-
+        if (args.length == 0){
+            args=useDefault();
+        }
+        
         ArrayList<String> ret = new ArrayList<String>(args.length);
         String regex = null;
         for (int i = 0; i < args.length; i++) {
@@ -228,7 +237,7 @@ public class Weaver {
             }
         }
         if (outputDir == null) {
-            System.err.println("Specify output directory with -d option");
+        	log.error("Specify output directory with -d option");
             System.exit(1);
         }
         mkdir(outputDir);

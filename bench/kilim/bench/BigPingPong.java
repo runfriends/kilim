@@ -5,7 +5,10 @@
  */
 
 package kilim.bench;
-import kilim.*;
+import kilim.Mailbox;
+import kilim.Pausable;
+import kilim.Scheduler;
+import kilim.Task;
 public class BigPingPong extends Task {
     static Mailbox<Msg>[] mboxes;
     static Mailbox<Msg> mainmb;
